@@ -1,5 +1,6 @@
 # DataAnalytics-Assessment-
 This repository contains SQL solutions for a data analytics assessment using customer, savings, and investment data. 
+
 ✅ How I Imported the Database File into MySQL Workbench
 Created a local MySQL database:
 

@@ -3,12 +3,13 @@ This repository contains SQL solutions for a data analytics assessment using cus
 
 ✅ How I Imported the Database File into MySQL Workbench
 
-Created a local MySQL database:
+1. Created a local MySQL database:
 
 Opened MySQL Workbench
+
 Created a new schema (e.g., adashi_staging)
 
-Loaded the .sql template:
+2. Loaded the .sql template:
 
 Navigated to File > Open SQL Script, then opened the .sql file
 

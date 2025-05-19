@@ -1,114 +1,91 @@
-# DataAnalytics-Assessment-
-This repository contains SQL solutions for a data analytics assessment using customer, savings, and investment data. 
+# DataAnalytics-Assessment
 
-✅ How I Imported the Database File into MySQL Workbench
+This document explains the approach taken to solve various customer and transaction analytics questions using MySQL. It also outlines key challenges faced and how they were resolved.
 
-1. Created a local MySQL database:
+---
 
-	Opened MySQL Workbench
-	
-	Created a new schema (e.g., adashi_staging)
+## ✅ How I Imported the Database File into MySQL Workbench
 
-2. Loaded the .sql template:
+1. **Created a local MySQL database**:
+   - Opened MySQL Workbench
+   - Created a new schema (e.g., `adashi_staging`)
 
-Navigated to File > Open SQL Script, then opened the .sql file
+2. **Loaded the `.sql` template**:
+   - Navigated to `File > Open SQL Script`, then opened the `.sql` file
+   - Connected to the target MySQL server
+   - Ran the script to create the schema and tables
 
-Connected to the target MySQL server
+---
 
-Ran the script to create the schema and tables
+## 🔍 Query 1: High-Value Customers with Multiple Products - [link](https://github.com/cultek15/DataAnalytics-Assessment-/blob/main/Assessment_Q1.sql)
 
+**Objective:** Identify customers who have both a savings and an investment plan and rank them by total deposits.
 
-🔍 Query 1: High-Value Customers with Multiple Products - link
+**Approach:**
+- Joined `users_customuser` with `plans_plan`
+- Used `COUNT(CASE WHEN...)` to count savings and investment plans
+- Filtered with `HAVING` to ensure both product types are held
+- Aggregated deposits, converting from kobo to naira
 
-Objective: Identify customers who have both a savings and an investment plan and rank them by total deposits.
+**Challenges:**
+- Ensuring deposits were positive and filtering by product type accurately
+- Managing currency unit conversion (kobo to naira)
 
-Approach:
+---
 
-Joined users_customuser with plans_plan
+## 📊 Query 2: Transaction Frequency Categorization - [link](https://github.com/cultek15/DataAnalytics-Assessment-/blob/main/Assessment_Q2.sql)
 
-Used COUNT(CASE WHEN...) to count savings and investment plans
+**Objective:** Categorize customers into high, medium, and low transaction frequency groups.
 
-Filtered with HAVING to ensure both product types are held
+**Approach:**
+- Calculated transactions per customer per month using `DATE_FORMAT`
+- Averaged those to get monthly frequency
+- Used `CASE` to assign frequency categories
+- Ordered results using `FIELD(...)` for logical output
 
-Aggregated deposits, converting from kobo to naira
-Challenges:
+**Challenges:**
+- Handling grouping by month in MySQL (`%Y-%m-01`)
+- Ensuring accurate category cutoffs using average logic
 
-Ensuring deposits were positive and filtering by product type accurately
+---
 
-Managing currency unit conversion (kobo to naira)
+## ⚠️ Query 3: Account Inactivity Alert - [link](https://github.com/cultek15/DataAnalytics-Assessment-/blob/main/Assessment_Q3.sql)
 
+**Objective:** Flag savings or investment plans with no inflow activity in the last 365 days.
 
-📊 Query 2: Transaction Frequency Categorization - link
+**Approach:**
+- Created a CTE (`inflow_dates`) to get last inflow per plan
+- Used `DATEDIFF` to calculate inactivity
+- Filtered out plans with `inactivity_days > 365`
+- Identified type using `CASE` based on flags
 
-Objective: Categorize customers into high, medium, and low transaction frequency groups.
+**Challenges:**
+- Couldn’t use column aliases in `WHERE`, had to repeat logic
+- Made sure only active product types were considered
 
-Approach:
+---
 
-Calculated transactions per customer per month using DATE_FORMAT
+## 📈 Query 4: Customer Lifetime Value (CLV) Estimation - [link](https://github.com/cultek15/DataAnalytics-Assessment-/blob/main/Assessment_Q4.sql)
 
-Averaged those to get monthly frequency
+**Objective:** Estimate CLV using total transactions and account tenure.
 
-Used CASE to assign frequency categories
+**Approach:**
+- Computed tenure using `TIMESTAMPDIFF`
+- Aggregated transaction totals and calculated profit (0.1% per transaction)
+- Used CLV formula: `((total_txns / tenure) * 12 * avg_profit_per_txn)`
+- Used `NULLIF` to avoid division-by-zero for recent users
 
-Ordered results using FIELD(...) for logical output
+**Challenges:**
+- Normalizing CLV to Naira from Kobo
+- Avoiding divide-by-zero using `NULLIF`
+- Ensuring profit calculations were done at correct precision
 
-Challenges:
+---
 
-Handling grouping by month in MySQL (%Y-%m-01)
-
-Ensuring accurate category cutoffs using average logic
-
-⚠️ Query 3: Account Inactivity Alert - link
-
-Objective: Flag savings or investment plans with no inflow activity in the last 365 days.
-
-Approach:
-
-Created a CTE (inflow_dates) to get last inflow per plan
-
-Used DATEDIFF to calculate inactivity
-
-Filtered out plans with inactivity_days > 365
-
-Identified type using CASE based on flags
-
-Challenges:
-
-Couldn’t use column aliases in WHERE, had to repeat logic
-
-Made sure only active product types were considered
-
-📈 Query 4: Customer Lifetime Value (CLV) Estimation - link
-
-Objective: Estimate CLV using total transactions and account tenure.
-
-Approach:
-
-Computed tenure using TIMESTAMPDIFF
-
-Aggregated transaction totals and calculated profit (0.1% per transaction)
-
-Used CLV formula: ((total_txns / tenure) * 12 * avg_profit_per_txn)
-
-Used NULLIF to avoid division-by-zero for recent users
-
-Challenges:
-
-Normalizing CLV to Naira from Kobo
-
-Avoiding divide-by-zero using NULLIF
-
-Ensuring profit calculations were done at correct precision
-
-✅ Summary
+## ✅ Summary
 
 These queries offer actionable insights for operations, marketing, and finance teams:
-
-Target high-value cross-selling customers
-
-Segment by engagement frequency
-
-Detect dormant accounts
-
-Estimate CLV for retention and acquisition strategies
-
+- Target high-value cross-selling customers
+- Segment by engagement frequency
+- Detect dormant accounts
+- Estimate CLV for retention and acquisition strategies

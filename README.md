@@ -5,9 +5,9 @@ This repository contains SQL solutions for a data analytics assessment using cus
 
 1. Created a local MySQL database:
 
-Opened MySQL Workbench
-
-Created a new schema (e.g., adashi_staging)
+	Opened MySQL Workbench
+	
+	Created a new schema (e.g., adashi_staging)
 
 2. Loaded the .sql template:
 
